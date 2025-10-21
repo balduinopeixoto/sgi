@@ -1,4 +1,5 @@
 <?php
+session_start();
 ini_set('max_execution_time', 0);
 
 require_once '../modelo/Visita.php';
@@ -7,7 +8,7 @@ $acao = $_GET['acao'] ?? '';
 
 if ($acao === 'agendar_visita') {
     $imovel_id  = $_POST['imovel_id'] ?? '';
-    $usuario_id = $_POST['usuario_id'] ?? '';
+    $usuario_id      = $_SESSION['idusuario'] ?? '';
     $data       = $_POST['data_visita'] ?? '';
     $hora       = $_POST['hora_visita'] ?? '';
 

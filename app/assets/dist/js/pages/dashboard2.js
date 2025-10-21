@@ -14,33 +14,60 @@ $(function () {
   // Get context with jQuery - using jQuery's .get() method.
   var salesChartCanvas = $('#salesChart').get(0).getContext('2d')
 
-  var salesChartData = {
-    labels  : ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-    datasets: [
-      {
-        label               : 'Digital Goods',
-        backgroundColor     : 'rgba(60,141,188,0.9)',
-        borderColor         : 'rgba(60,141,188,0.8)',
-        pointRadius          : false,
-        pointColor          : '#3b8bba',
-        pointStrokeColor    : 'rgba(60,141,188,1)',
-        pointHighlightFill  : '#fff',
-        pointHighlightStroke: 'rgba(60,141,188,1)',
-        data                : [28, 48, 40, 19, 86, 27, 90]
-      },
-      {
-        label               : 'Electronics',
-        backgroundColor     : 'rgba(210, 214, 222, 1)',
-        borderColor         : 'rgba(210, 214, 222, 1)',
-        pointRadius         : false,
-        pointColor          : 'rgba(210, 214, 222, 1)',
-        pointStrokeColor    : '#c1c7d1',
-        pointHighlightFill  : '#fff',
-        pointHighlightStroke: 'rgba(220,220,220,1)',
-        data                : [65, 59, 80, 81, 56, 55, 40]
-      },
-    ]
-  }
+  $(function () {
+  'use strict'
+
+  const salesChartCanvas = $('#salesChart').get(0).getContext('2d');
+
+  // 🔹 Buscar dados do PHP C:\xampp\htdocs\sgi\app\dist\js\pages
+  fetch('../../controller/imovel_controller.php?acao=relatorioMensal')
+    .then(res => res.json())
+    .then(response => {
+      if (response.status === 'success') {
+        const d = response.dados;
+
+        const salesChartData = {
+          labels  : ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
+          datasets: [
+            {
+              label: 'Vendidos',
+              backgroundColor: 'rgba(37, 152, 62,0.9)',
+              borderColor: 'rgba(60,141,188,0.8)',
+              data: d.vendido
+            },
+            {
+              label: 'Disponíveis',
+              backgroundColor: 'rgba(210, 214, 222, 1)',
+              borderColor: 'rgba(210, 214, 222, 1)',
+              data: d.disponivel
+            },
+            {
+              label: 'Alugados',
+              backgroundColor: 'rgba(166, 26, 24,1)',
+              borderColor: 'rgba(222, 211, 210, 1)',
+              data: d.alugado
+            }
+          ]
+        };
+
+        const salesChartOptions = {
+          maintainAspectRatio : false,
+          responsive : true,
+          legend: { display: true }
+        };
+
+        new Chart(salesChartCanvas, {
+          type: 'line',
+          data: salesChartData,
+          options: salesChartOptions
+        });
+      } else {
+        console.error(response.message);
+      }
+    })
+    .catch(err => console.error('Erro ao carregar dados:', err));
+});
+
 
   var salesChartOptions = {
     maintainAspectRatio : false,

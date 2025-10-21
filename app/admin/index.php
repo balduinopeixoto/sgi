@@ -1,3 +1,15 @@
+<?php
+session_start();
+require_once '../../conexao/conexao.php';
+
+$conexao=ligar();
+
+if(!isset($_SESSION['usuario']) && !isset($_SESSION['idusuario'])) {
+    header('Location: ../../marketplace/login.php');
+    exit();
+}
+
+?>
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -6,48 +18,29 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
 
   <title>Sistema de gestão Imobiliaria</title>
-
-  <!-- Font Awesome Icons -->
-  <link rel="stylesheet" href="../assets/plugins/fontawesome-free/css/all.min.css">
-  <!-- overlayScrollbars -->
-  <link rel="stylesheet" href="../assets/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
-  <!-- Theme style -->
-  <link rel="stylesheet" href="../assets/dist/css/adminlte.min.css">
-  <link rel="stylesheet" href="../assets/plugins/select2/css/select2.min.css">
-  <link rel="stylesheet" href="../assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
-    <link rel="stylesheet" href="../assets/plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css">
-  <!-- Theme style -->
-  <link rel="stylesheet" href="../assets/dist/css/adminlte.min.css">
- <link rel="stylesheet" href="../assets/plugins/fontawesome-free/css/all.min.css">
- <link rel="stylesheet" href="../assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
-  <!-- Ionicons -->
-  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-  <!-- Google Font: Source Sans Pro -->
-  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
-
-
-  <link rel="stylesheet" href="../assets/plugins/fontawesome-free/css/all.min.css">
-  <!-- Ionicons -->
-  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-  <!-- daterange picker -->
-  <link rel="stylesheet" href="../assets/plugins/daterangepicker/daterangepicker.css">
-  <!-- iCheck for checkboxes and radio inputs -->
-  <link rel="stylesheet" href="../assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
-  <!-- Bootstrap Color Picker -->
-  <link rel="stylesheet" href="../assets/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css">
-  <!-- Tempusdominus Bbootstrap 4 -->
-  <link rel="stylesheet" href="../assets/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
-  <!-- Select2 -->
-  <link rel="stylesheet" href="../assets/plugins/select2/css/select2.min.css">
-  <link rel="stylesheet" href="../assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
-  <!-- Bootstrap4 Duallistbox -->
-  <link rel="stylesheet" href="../assets/plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css">
-  <!-- Theme style -->
-  <link rel="stylesheet" href="../assets/dist/css/adminlte.min.css">
-
-
-
-
+<!-- Font Awesome Icons -->
+<link rel="stylesheet" href="../assets/plugins/fontawesome-free/css/all.min.css">
+<!-- Ionicons -->
+<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+<!-- overlayScrollbars -->
+<link rel="stylesheet" href="../assets/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+<!-- daterangepicker -->
+<link rel="stylesheet" href="../assets/plugins/daterangepicker/daterangepicker.css">
+<!-- iCheck -->
+<link rel="stylesheet" href="../assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+<!-- Bootstrap Color Picker -->
+<link rel="stylesheet" href="../assets/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css">
+<!-- Tempusdominus Bootstrap 4 -->
+<link rel="stylesheet" href="../assets/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+<!-- Select2 -->
+<link rel="stylesheet" href="../assets/plugins/select2/css/select2.min.css">
+<link rel="stylesheet" href="../assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+<!-- Bootstrap4 Duallistbox -->
+<link rel="stylesheet" href="../assets/plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css">
+<!-- Theme style -->
+<link rel="stylesheet" href="../assets/dist/css/adminlte.min.css">
+<!-- Google Font: Source Sans Pro -->
+<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 </head>
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
 <div class="wrapper">
@@ -65,9 +58,9 @@
     </ul>
 
     <!-- SEARCH FORM -->
-    <form class="form-inline ml-3">
+    <form class="form-inline ml-3" method="POST">
       <div class="input-group input-group-sm">
-        <input class="form-control form-control-navbar" type="search" placeholder="Pesquisar" aria-label="Pesquisar">
+        <input class="form-control form-control-navbar" type="search" name="pesquisar" placeholder="Pesquisar" aria-label="Pesquisar">
         <div class="input-group-append">
           <button class="btn btn-navbar" type="submit">
             <i class="fas fa-search"></i>
@@ -139,28 +132,23 @@
       <!-- Notifications Dropdown Menu -->
       <li class="nav-item dropdown">
         <a class="nav-link" data-toggle="dropdown" href="#">
-          <i class="far fa-bell"></i>
-          <span class="badge badge-warning navbar-badge">15</span>
+          <i class="fas fa-cog"></i>
+          <span class="badge badge-warning navbar-badge"></span>
         </a>
         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-          <span class="dropdown-item dropdown-header">15 Notifications</span>
+          <span class="dropdown-item dropdown-header">Configurações</span>
           <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-envelope mr-2"></i> 4 new messages
-            <span class="float-right text-muted text-sm">3 mins</span>
+          <a  class="dropdown-item" data-toggle="modal" data-target="#modal-senha">
+            <i class="fas fa-key mr-2"></i> Mudar Senha
+            <span class="float-right text-muted text-sm"></span>
           </a>
           <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-users mr-2"></i> 8 friend requests
-            <span class="float-right text-muted text-sm">12 hours</span>
+          <a href="../../controller/login_controller.php?acao=logout" class="dropdown-item">
+            <i class="fas fa-sign-out-alt mr-2"></i> Terminar Sessão
+            <span class="float-right text-muted text-sm"></span>
           </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
-            <i class="fas fa-file mr-2"></i> 3 new reports
-            <span class="float-right text-muted text-sm">2 days</span>
-          </a>
-          <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
+          
+          
         </div>
       </li>
       <li class="nav-item">
@@ -188,7 +176,7 @@
           <img src="../assets/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">Romário Pontes</a>
+          <a href="#" class="d-block"><?=$_SESSION['nome'];?></a>
         </div>
       </div>
 
@@ -201,24 +189,60 @@
             <a href="?page=painel" class="nav-link active">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
-                Painel Principal
+                Painel Princípal
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
             
           </li>
           <li class="nav-item">
+            <a href="?page=imovel" class="nav-link">
+              <i class="nav-icon fas fa-home"></i>
+              <p>
+                Imóvel 
+                <span class="right badge badge-danger"></span>
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="?page=proprietario" class="nav-link">
+              <i class="nav-icon fas fa-user"></i>
+              <p>
+                Proprietário
+                <span class="right badge badge-danger"></span>
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
             <a href="?page=usuarios" class="nav-link">
               <i class="nav-icon fas fa-th"></i>
               <p>
-                Usuários
-                <span class="right badge badge-danger">novo</span>
+                Usuário
+                <span class="right badge badge-danger"></span>
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="?page=cliente" class="nav-link">
+              <i class="nav-icon fas fa-users"></i>
+              <p>
+                Cliente
+                <span class="right badge badge-danger"></span>
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="?page=contrato" class="nav-link">
+              <i class="nav-icon fas fa-file"></i>
+              <p>
+                Contratos
+                <span class="right badge badge-danger"></span>
               </p>
             </a>
           </li>
          
          
-          <li class="nav-item has-treeview">
+          <!--<li class="nav-item has-treeview">
             <a href="?page=imovel" class="nav-link">
               <i class="nav-icon fas fa-tree"></i>
               <p>
@@ -304,7 +328,7 @@
                 </a>
               </li>
             </ul>
-          </li>
+          </li>-->
            </ul>
       </nav>
       <!-- /.sidebar-menu -->
@@ -330,13 +354,52 @@ if(isset($_GET['page'])) {
 
 
 
-
-
-
-
-
-
-
+  <div class="modal fade show" id="modal-senha" style="display:none; padding-right: 15px;" aria-modal="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Alterar Senha</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <form action="../../controller/usuario_controller.php?acao=alterarsenha" method="POST">
+            <div class="modal-body">
+             <div class="card-body" data-select2-id="30">
+                <div class="row" data-select2-id="53">
+              <div class="col-md-6">
+             <div class="form-group">
+                    <label for="exampleInputEmail1">Senha Antiga</label>
+                    <input type="password" name="senhaantiga" class="form-control" id="senhaantiga" placeholder="Digite a senha antiga">
+                  </div>
+             </div>
+              <div class="col-md-6">
+             <div class="form-group">
+                    <label for="exampleInputEmail1">Nova Senha</label>
+                    <input type="password" name="novasenha" class="form-control" id="novasenha" placeholder="Digite a nova senha">
+                    <input type="hidden" name="id" class="form-control" id="id">
+                  </div>
+             </div>
+              <div class="col-md-6">
+             <div class="form-group">
+                    <label for="exampleInputEmail1">Confirma-senha</label>
+                    <input type="password" name="confirmar-senha" class="form-control" id="confirmar-senha" placeholder="Confirme a senha">
+                  </div>
+             </div>
+            </div>
+             
+            </div>
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Sair</button>
+              <button type="button" class="btn btn-primary">Gravar</button>
+            </div>
+            </form>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
 
 
 
@@ -353,40 +416,17 @@ if(isset($_GET['page'])) {
   </footer>
 </div>
 <!-- ./wrapper -->
-
 <!-- REQUIRED SCRIPTS -->
 <!-- jQuery -->
 <script src="../assets/plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap -->
 <script src="../assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="../assets/plugins/select2/js/select2.full.min.js"></script>
-<script src="../assets/plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js"></script>
-<script src="../assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
-<!-- AdminLTE App -->
-<script src="../assets/dist/js/adminlte.js"></script>
-<script src="../assets/plugins/chart.js/Chart.min.js"></script>
-
-<!-- OPTIONAL SCRIPTS -->
-<script src="../assets/dist/js/demo.js"></script>
-
-<!-- PAGE PLUGINS -->
-<!-- jQuery Mapael -->
-<script src="../assets/plugins/jquery-mousewheel/jquery.mousewheel.js"></script>
-<script src="../assets/plugins/raphael/raphael.min.js"></script>
-<script src="../assets/plugins/jquery-mapael/jquery.mapael.min.js"></script>
-<script src="../assets/plugins/jquery-mapael/maps/usa_states.min.js"></script>
-<!-- ChartJS -->
-
-<!-- PAGE SCRIPTS -->
-<script src="../assets/dist/js/pages/dashboard2.js"></script>
-
-<script src="../assets/plugins/jquery/jquery.min.js"></script>
-<!-- Bootstrap 4 -->
-<script src="../assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- Select2 -->
 <script src="../assets/plugins/select2/js/select2.full.min.js"></script>
 <!-- Bootstrap4 Duallistbox -->
 <script src="../assets/plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js"></script>
+<!-- overlayScrollbars -->
+<script src="../assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
 <!-- InputMask -->
 <script src="../assets/plugins/moment/moment.min.js"></script>
 <script src="../assets/plugins/inputmask/min/jquery.inputmask.bundle.min.js"></script>
@@ -398,11 +438,22 @@ if(isset($_GET['page'])) {
 <script src="../assets/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
 <!-- Bootstrap Switch -->
 <script src="../assets/plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>
+<!-- ChartJS -->
+<script src="../assets/plugins/chart.js/Chart.min.js"></script>
+<!-- jQuery Mapael -->
+<script src="../assets/plugins/jquery-mousewheel/jquery.mousewheel.js"></script>
+<script src="../assets/plugins/raphael/raphael.min.js"></script>
+<script src="../assets/plugins/jquery-mapael/jquery.mapael.min.js"></script>
+<script src="../assets/plugins/jquery-mapael/maps/usa_states.min.js"></script>
 <!-- AdminLTE App -->
 <script src="../assets/dist/js/adminlte.min.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="../assets/dist/js/demo.js"></script>
+<!-- AdminLTE Pages -->
+<script src="../assets/dist/js/pages/dashboard2.js"></script>
+<!-- SweetAlert2 -->
 <script src="sweetalert2.js"></script>
+
 
 <script>
   $(function () {
@@ -474,114 +525,6 @@ if(isset($_GET['page'])) {
   })
 </script>
 
-
-
-
-<script src="../../assets/sweetalert2.js"></script>
-<script>
-  function validarFormularioCadastro(e) {
-    e.preventDefault(); // evita envio automático do form
-
-    let formValido = true;
-
-    // pega todos os campos
-    let nome = document.getElementById("nome");
-    let usuario = document.getElementById("usuario");
-    let email = document.getElementById("email");
-    let telefone = document.getElementById("telefone");
-    let senha = document.getElementById("senha");
-    let confirmarSenha = document.getElementById("confirmar-senha");
-
-    // função auxiliar para validar campo obrigatório
-    function validarObrigatorio(campo) {
-      if (campo.value.trim() === "") {
-        campo.classList.add("is-invalid");
-        formValido = false;
-      } else {
-        campo.classList.remove("is-invalid");
-      }
-    }
-
-    // valida obrigatórios
-    validarObrigatorio(nome);
-    validarObrigatorio(usuario);
-    validarObrigatorio(email);
-    validarObrigatorio(telefone);
-    validarObrigatorio(senha);
-    validarObrigatorio(confirmarSenha);
-
-    // valida e-mail
-    let regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (email.value.trim() && !regexEmail.test(email.value)) {
-      email.classList.add("is-invalid");
-      Swal.fire({
-        icon: 'error',
-        title: 'E-mail inválido!',
-        text: 'Digite um e-mail válido.'
-      });
-      return false;
-    }
-
-    // valida telefone (apenas números, mínimo 9 dígitos)
-    let regexTel = /^[0-9]{9,15}$/;
-    if (telefone.value.trim() && !regexTel.test(telefone.value)) {
-      telefone.classList.add("is-invalid");
-      Swal.fire({
-        icon: 'error',
-        title: 'Telefone inválido!',
-        text: 'Digite apenas números (mínimo 9 dígitos).'
-      });
-      return false;
-    }
-
-    // valida senha
-    if (senha.value.trim() && senha.value.length < 6) {
-      senha.classList.add("is-invalid");
-      Swal.fire({
-        icon: 'error',
-        title: 'Senha fraca!',
-        text: 'A senha deve ter pelo menos 6 caracteres.'
-      });
-      return false;
-    }
-
-    if (senha.value.trim() && confirmarSenha.value.trim() && senha.value !== confirmarSenha.value) {
-      confirmarSenha.classList.add("is-invalid");
-      Swal.fire({
-        icon: 'error',
-        title: 'Senhas diferentes!',
-        text: 'A confirmação da senha não confere.'
-      });
-      return false;
-    }
-
-    // se algum campo obrigatório ficou vazio
-    if (!formValido) {
-      Swal.fire({
-        icon: 'warning',
-        title: 'Campos obrigatórios!',
-        text: 'Preencha todos os campos obrigatórios.'
-      });
-      return false;
-    }
-
-    // Se passou em todas as validações, envia o formulário
-    e.target.submit();
-  }
-
-  // adiciona a validação ao formulário
-  document.addEventListener("DOMContentLoaded", () => {
-    const form = document.querySelector("#modal-cadastro form");
-    form.addEventListener("submit", validarFormularioCadastro);
-
-    // remover borda vermelha ao digitar
-    document.querySelectorAll("#modal-cadastro input").forEach(input => {
-      input.addEventListener("input", () => {
-        input.classList.remove("is-invalid");
-      });
-    });
-  });
-</script>
 
 
 </body>
